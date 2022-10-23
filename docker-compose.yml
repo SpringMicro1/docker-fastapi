@@ -1,0 +1,15 @@
+version: '3'
+services:
+  # Define the Flask web application
+  fastapiapp:
+
+    # Build the Dockerfile that is in the web directory
+    build: ./web
+
+    ports:
+      - "8000:8001"
+
+    # Mount the web directory within the container at /home/fastapi/app/web
+    # :Z lets the container past SELinux
+    volumes:
+      - ./web:/home/fastapi/app/web
