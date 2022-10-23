@@ -1,83 +1,83 @@
-version: '4'
-services:
-  # Define the Flask web application
-  fastapiapp:
+# version: '4'
+# services:
+#   # Define the Flask web application
+#   fastapiapp:
 
-    # Build the Dockerfile that is in the web directory
-    build: ./web
+#     # Build the Dockerfile that is in the web directory
+#     build: ./web
 
-    # Always restart the container regardless of the exit status; try and restart the container indefinitely
-    restart: always
+#     # Always restart the container regardless of the exit status; try and restart the container indefinitely
+#     restart: always
 
-    # Expose port 8000 to other containers (not to the host of the machine)
-    ports:
-      - "8000:8001"
+#     # Expose port 8000 to other containers (not to the host of the machine)
+#     ports:
+#       - "8000:8001"
 
-    # Mount the web directory within the container at /home/fastapi/app/web
-    volumes:
-      - ./web:/home/fastapi/app/web
+#     # Mount the web directory within the container at /home/fastapi/app/web
+#     volumes:
+#       - ./web:/home/fastapi/app/web
 
-    # Don't create this container until the redis and postgres containers (below) have been created
-    # depends_on:
-    #   - redis
-    #   - postgres
+#     # Don't create this container until the redis and postgres containers (below) have been created
+#     # depends_on:
+#     #   - redis
+#     #   - postgres
 
-    # Link the redis and postgres containers together so they can talk to one another
-    # links:
-    #   - redis
-    #   - postgres
+#     # Link the redis and postgres containers together so they can talk to one another
+#     # links:
+#     #   - redis
+#     #   - postgres
 
-    # Pass environment variables to the fastapi container (this debug level lets you see more useful information)
-    environment:
-      FLASK_DEBUG: 1
+#     # Pass environment variables to the fastapi container (this debug level lets you see more useful information)
+#     environment:
+#       FLASK_DEBUG: 1
 
-    # Deploy with three replicas in the case one of the containers fails (only in Docker Swarm)
-    deploy:
-      mode: replicated
-      replicas: 1 #3
-  # Define the redis Docker container
-  # redis:
+#     # Deploy with three replicas in the case one of the containers fails (only in Docker Swarm)
+#     deploy:
+#       mode: replicated
+#       replicas: 1 #3
+#   # Define the redis Docker container
+#   # redis:
 
-  #   # use the redis:alpine image: https://hub.docker.com/_/redis/
-  #   image: redis:alpine
-  #   restart: always
-  #   deploy:
-  #     mode: replicated
-  #     replicas: 3
+#   #   # use the redis:alpine image: https://hub.docker.com/_/redis/
+#   #   image: redis:alpine
+#   #   restart: always
+#   #   deploy:
+#   #     mode: replicated
+#   #     replicas: 3
 
-  # Define the redis NGINX forward proxy container
-  # nginx:
+#   # Define the redis NGINX forward proxy container
+#   # nginx:
 
-  #   # build the nginx Dockerfile: http://bit.ly/2kuYaIv
-  #   build: nginx/
-  #   restart: always
+#   #   # build the nginx Dockerfile: http://bit.ly/2kuYaIv
+#   #   build: nginx/
+#   #   restart: always
 
-  #   # Expose port 80 to the host machine
-  #   ports:
-  #     - "80:4000" # "80:80"
-  #   deploy:
-  #     mode: replicated
-  #     replicas: 1 #3
+#   #   # Expose port 80 to the host machine
+#   #   ports:
+#   #     - "80:4000" # "80:80"
+#   #   deploy:
+#   #     mode: replicated
+#   #     replicas: 1 #3
 
-  #   # The Flask application needs to be available for NGINX to make successful proxy requests
-  #   depends_on:
-  #     - fastapiapp
-  # Define the postgres database
-  # postgres:
-  #   restart: always
-  #   # Use the postgres alpine image: https://hub.docker.com/_/postgres/
-  #   image: postgres:alpine
+#   #   # The Flask application needs to be available for NGINX to make successful proxy requests
+#   #   depends_on:
+#   #     - fastapiapp
+#   # Define the postgres database
+#   # postgres:
+#   #   restart: always
+#   #   # Use the postgres alpine image: https://hub.docker.com/_/postgres/
+#   #   image: postgres:alpine
 
-  #   # Mount an initialization script and the persistent postgresql data volume
-  #   volumes:
-  #     - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-  #     - ./postgres/data:/var/lib/postgresql/data
+#   #   # Mount an initialization script and the persistent postgresql data volume
+#   #   volumes:
+#   #     - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+#   #     - ./postgres/data:/var/lib/postgresql/data
 
-  #   # Pass postgres environment variables
-  #   environment:
-  #     POSTGRES_PASSWORD: linode123
-  #     POSTGRES_DB: linode
+#   #   # Pass postgres environment variables
+#   #   environment:
+#   #     POSTGRES_PASSWORD: linode123
+#   #     POSTGRES_DB: linode
 
-  #   # Expose port 5432 to other Docker containers
-  #   expose:
-  #     - "5432"
+#   #   # Expose port 5432 to other Docker containers
+#   #   expose:
+#   #     - "5432"

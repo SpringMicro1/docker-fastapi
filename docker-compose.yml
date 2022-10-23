@@ -1,15 +1,35 @@
 version: '3'
+networks:
+  app-tier:
+    driver: bridge
 services:
-  # Define the Flask web application
   fastapiapp:
-
-    # Build the Dockerfile that is in the web directory
-    build: ./web
-
+    # Build the Dockerfile that is in the api directory
+    build: ./api
     ports:
-      - "8000:8001"
-
-    # Mount the web directory within the container at /home/fastapi/app/web
-    # :Z lets the container past SELinux
+      - "8000:8000"
+    environment: 
+      - MONGODB_CONNSTRING=mongodb://admin:password@mongodb
+    # Mount the api directory within the container at /home/fastapi/app/api
     volumes:
-      - ./web:/home/fastapi/app/web
+      - ./api:/home/fastapi/app/api
+    entrypoint: ["sh", "/home/fastapi/app/api/start.sh"]
+    depends_on:
+      - mongodb
+    networks:
+      - app-tier
+  mongodb:
+    container_name: docker-fastapi-mongodb
+    # Using this image because of https://github.com/docker-library/mongo/issues/329#issuecomment-852129727
+    image: bitnami/mongodb:latest
+    environment:
+      MONGODB_DATABASE: mydatabase
+      MONGODB_ROOT_PASSWORD: password
+      MONGODB_ROOT_USER: admin
+    networks:
+      - app-tier
+    # To persist the data outside the container
+    volumes:
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:

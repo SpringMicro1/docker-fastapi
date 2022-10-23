@@ -1,0 +1,1 @@
+/usr/local/bin/gunicorn main:app --reload --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind :8000 --log-level debug
