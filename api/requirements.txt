@@ -4,3 +4,11 @@ gunicorn
 beanie
 pydantic
 python-decouple
+
+# testing
+httpx
+pytest-asyncio # for async tests
+anyio # to allow pytest to run async functions
+
+# local
+black # formatting

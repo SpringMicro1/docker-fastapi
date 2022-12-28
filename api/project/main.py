@@ -1,12 +1,9 @@
-from fastapi import FastAPI, Body
-from decouple import config
+from fastapi import FastAPI, Body, status
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie, Document
 from typing import List
-
-MONGODB_CONNSTRING = config("MONGODB_CONNSTRING")
-print(MONGODB_CONNSTRING)
+from project.config import CONFIG
 
 app = FastAPI()
 
@@ -22,8 +19,8 @@ class Comment(Document, CommentBase):
 @app.on_event("startup")
 async def start():
     # init db
-    client = AsyncIOMotorClient(MONGODB_CONNSTRING)
-    await init_beanie(database=client["admin"], document_models=[Comment])
+    client = AsyncIOMotorClient(CONFIG.MONGODB_CONNSTRING)
+    await init_beanie(database=client[CONFIG.DB_NAME], document_models=[Comment])
 
 
 @app.get("/")
@@ -37,6 +34,6 @@ async def list_comments():
     return await comments.to_list()
 
 
-@app.post("/comments", response_model=Comment)
+@app.post("/comments", response_model=Comment, status_code=status.HTTP_201_CREATED)
 async def create_comment(body: CommentBase = Body(...)):
     return await Comment(**body.dict()).create()
