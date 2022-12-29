@@ -54,7 +54,7 @@ git push --set-upstream ssh://git@localhost:8922/root/$(git rev-parse --show-top
 # add remote to git repo
 git remote add gitlab ssh://git@localhost:8922/root/$(git rev-parse --show-toplevel | xargs basename).git
 # deploy
-git push -u gitlab
+git push gitlab
 ```
 
 ### Register a Runner
