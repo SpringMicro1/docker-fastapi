@@ -5,8 +5,11 @@ stages: # List of stages for jobs, and their order of execution
 
 build-job: # This job runs in the build stage, which runs first.
   stage: build
-  script:
+  before_script:
     - docker-compose up -d
+  script:
     - echo "Containers built."
     - docker-compose exec fastapiapp pytest -s
     - docker-compose exec fastapiapp pylint
+  after_script:
+    - docker-compose down
