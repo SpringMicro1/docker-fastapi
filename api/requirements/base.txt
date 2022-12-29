@@ -1,0 +1,5 @@
+fastapi
+uvicorn # ASGI server
+beanie # MongoDB ODM
+pydantic # data models
+python-decouple # environment

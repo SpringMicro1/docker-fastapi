@@ -28,6 +28,10 @@ docker exec -it docker-fastapi pytest -s -k "test_comments"
 
 ### Self Hosted GitLab
 
+```
+docker-compose up -f docker-compose-gitlab.yml up
+```
+
 > NOTE: The GitLab container takes like 10-15 minutes to get up and running. Check the logs to see when it's ready.
 
 https://docs.gitlab.com/ee/install/docker.html#install-gitlab-using-docker-compose

@@ -1,0 +1,3 @@
+httpx # for requests
+pytest-asyncio # for async tests
+anyio # to allow pytest to run async functions
