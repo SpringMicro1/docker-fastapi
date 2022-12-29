@@ -10,24 +10,21 @@ docker-compose up -d
 
 ## Test
 
-The tests can be found in `api/test_main.py`.
+The tests can be found in `api/project/test_main.py`.
 
-Set the `TEST_MONGO_URI` in the environment if you are not using `localhost`. Then just run the test suite. The `-s` flag enables printed output.
+Set the `TEST_MONGO_URI` in the environment if you are not using the default in `api/project/test_main`. Then just run the test suite. The `-s` flag enables printed output.
 
 ```bash
 docker exec -it docker-fastapi pytest -s
 ```
 
-To test a specific function from `api/test_main.py`, use the `-k` option.
+To test a specific function from `api/project/test_main.py`, use the `-k` option.
 
 ```bash
 docker exec -it docker-fastapi pytest -s -k "test_comments"
 ```
 
 ## CI/CD
-
-Docker In Docker (dind)
-GitLab running in dind
 
 ### Self host GitLab
 
@@ -59,3 +56,9 @@ git remote add gitlab ssh://git@localhost:8922/root/$(git rev-parse --show-tople
 # deploy
 git push -u gitlab
 ```
+
+### Register a Runner
+
+Get the `REGISTRATION_TOKEN` at http://localhost:8980/root/docker-fastapi/-/settings/ci_cd#js-runners-settings. Make sure the rest of the variables in `.env.example` are set in a `.env` file. Use the IP Address of localhost, not localhost for the `CI_SERVER_URL`.
+
+A runner gets registered in the `register-runner` service defined in `docker-compose.yml`. Simply execute `docker-compose up -d` to register the runner. The output configuration will be in `config/config.toml`.
