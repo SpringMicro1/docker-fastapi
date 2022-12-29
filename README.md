@@ -29,7 +29,7 @@ docker exec -it docker-fastapi pytest -s -k "test_comments"
 ### Self Hosted GitLab
 
 ```
-docker-compose up -f docker-compose-gitlab.yml up
+docker-compose up -f docker-compose-gitlab.yml -d
 ```
 
 > NOTE: The GitLab container takes like 10-15 minutes to get up and running. Check the logs to see when it's ready.
@@ -66,3 +66,7 @@ git push gitlab
 Get the `REGISTRATION_TOKEN` at http://localhost:8980/root/docker-fastapi/-/settings/ci_cd#js-runners-settings. Make sure the rest of the variables in `.env.example` are set in a `.env` file. Use the IP Address of localhost, not localhost for the `CI_SERVER_URL`.
 
 A runner gets registered in the `register-runner` service defined in `docker-compose.yml`. Simply execute `docker-compose up -d` to register the runner. The output configuration will be in `config/config.toml`.
+
+### GitLab Container Registry
+
+For the jobs in the CI pipeline to run, they need access to the containers where our app runs. The GitLab Container Registry should be default enabled on port 5050 (see [https://docs.gitlab.com/ee/administration/packages/container_registry.html](https://docs.gitlab.com/ee/administration/packages/container_registry.html)).

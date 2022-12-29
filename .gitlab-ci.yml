@@ -1,14 +1,7 @@
-.run-containers:
-  # template syntax: https://stackoverflow.com/questions/54074433/gitlab-ci-specifying-stages-in-before-script
-  before_script:
-    - docker-compose up -d
-  after_script:
-    - docker-compose down
-
 stages: # List of stages for jobs, and their order of execution
   - build
   - test
-  - deploy
+  # - deploy
 
 build-job: # This job runs in the build stage, which runs first.
   stage: build
@@ -16,27 +9,24 @@ build-job: # This job runs in the build stage, which runs first.
     - docker-compose build
     - echo "Containers built."
 
-unit-test-job: # This job runs in the test stage.
-  stage: test # It only starts when the job in the build stage completes successfully.
-  #extends: .run-containers
-  script:
-    - echo "Running unit tests..."
-    - docker-compose up -d
-    - docker exec docker-fastapi pytest -s
-    - docker-compose down
+# unit-test-job: # This job runs in the test stage.
+#   stage: test # It only starts when the job in the build stage completes successfully.
+#   script:
+#     - echo "Running unit tests..."
+#     - docker-compose up -d
+#     - docker exec docker-fastapi pytest -s
+#     - docker-compose down
 
 lint-test-job: # This job also runs in the test stage.
   stage: test # It can run at the same time as unit-test-job (in parallel).
-  #extends: .run-containers
   script:
     - echo "Linting code..."
     - pip install pylint
     - pwd
     - pylint ./api/project
-
-deploy-job: # This job runs in the deploy stage.
-  stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+# deploy-job: # This job runs in the deploy stage.
+#   stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
+#   environment: production
+#   script:
+#     - echo "Deploying application..."
+#     - echo "Application successfully deployed."
