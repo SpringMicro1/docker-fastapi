@@ -26,7 +26,7 @@ docker exec -it docker-fastapi pytest -s -k "test_comments"
 
 ## CI/CD
 
-### Self host GitLab
+### Self Hosted GitLab
 
 > NOTE: The GitLab container takes like 10-15 minutes to get up and running. Check the logs to see when it's ready.
 
@@ -50,7 +50,7 @@ docker exec -it gitlab bash -c 'grep "Password:" /etc/gitlab/initial_root_passwo
 
 ```bash
 # create blank project
-git push --set-upstream ssh://git@localhost:8922/root/$(git rev-parse --show-toplevel | xargs basename).git $(git rev-parse --abbrev-ref HEAD)
+git push ssh://git@localhost:8922/root/$(git rev-parse --show-toplevel | xargs basename).git $(git rev-parse --abbrev-ref HEAD)
 # add remote to git repo
 git remote add gitlab ssh://git@localhost:8922/root/$(git rev-parse --show-toplevel | xargs basename).git
 # deploy
