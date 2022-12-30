@@ -66,13 +66,13 @@ services:
       - register 
       - --non-interactive
       - --locked=false
-      - --privileged=true
       - --registration-token=${REGISTRATION_TOKEN}
       - --url=${CI_SERVER_URL}
       - --clone-url=${CI_SERVER_URL}
       - --name=${RUNNER_NAME}
       - --executor=docker
       - --docker-image=docker:20-dind
+      - --docker-privileged=true
       - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
     volumes:
       - './config:/etc/gitlab-runner'
