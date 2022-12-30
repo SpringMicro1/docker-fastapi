@@ -1,19 +1,30 @@
-image: docker:git
+image: docker:stable
+
 services:
 - docker:dind
 
 stages: # List of stages for jobs, and their order of execution
-  - build
+  - dc
+  #- build
   #- test
   # - deploy
 
-build-job: # This job runs in the build stage, which runs first.
-  stage: build
-  before_script:
-    - docker-compose up -d
+dc-job:
+  stage: dc
+  image: docker/compose
   script:
-    - echo "Containers built."
-    - docker-compose exec fastapiapp pytest -s
-    - docker-compose exec fastapiapp pylint
+    - docker-compose version
+    - docker-compose up -d
   after_script:
     - docker-compose down
+
+# build-job: # This job runs in the build stage, which runs first.
+#   stage: build
+#   before_script:
+#     - docker-compose up -d
+#   script:
+#     - echo "Containers built."
+#     - docker-compose exec fastapiapp pytest -s
+#     - docker-compose exec fastapiapp pylint
+#   after_script:
+#     - docker-compose down
