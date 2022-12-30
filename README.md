@@ -47,6 +47,13 @@ Get the password:
 docker exec -it gitlab bash -c 'grep "Password:" /etc/gitlab/initial_root_password'
 ```
 
+### Build Docker Image
+
+```bash
+cd api
+sh build.sh
+```
+
 ### Create New Project on GitLab
 
 1. Deactivate new user registration when prompted (recommended).
