@@ -66,6 +66,7 @@ services:
       - register 
       - --non-interactive
       - --locked=false
+      - --privileged=true
       - --registration-token=${REGISTRATION_TOKEN}
       - --url=${CI_SERVER_URL}
       - --clone-url=${CI_SERVER_URL}
