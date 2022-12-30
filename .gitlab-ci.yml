@@ -13,7 +13,9 @@ test-job:
   script:
     - docker-compose version
     - docker-compose up -d
-    - docker container ls
+    - docker ps --no-trunc
+    - echo "view all"
+    - docker ps -a
     - docker exec docker-fastapi pytest -s
   after_script:
     - docker-compose down
