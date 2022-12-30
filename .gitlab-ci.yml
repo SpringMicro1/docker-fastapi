@@ -13,9 +13,10 @@ test-job:
   script:
     - docker-compose version
     #- docker-compose up -d
+    - docker-compose build
     - docker-compose run fastapiapp pytest -s
-  after_script:
-    - docker-compose down
+  # after_script:
+  #   - docker-compose down
 # build-job: # This job runs in the build stage, which runs first.
 #   stage: build
 #   before_script:
