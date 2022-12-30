@@ -8,6 +8,8 @@ A repository with a FastAPI app and CI/CD enabled with a self-hosted GitLab cont
 docker-compose up -d
 ```
 
+The `docker-compose.yml` file uses the local `api/` files in a volume, so feel free to edit and save the code without having to restart the container.
+
 ## Test
 
 The tests can be found in `api/project/test_main.py`.
@@ -47,11 +49,12 @@ Get the password:
 docker exec -it gitlab bash -c 'grep "Password:" /etc/gitlab/initial_root_password'
 ```
 
-### Build Docker Image
+If you need to reset the root password ([source](https://stackoverflow.com/questions/60062065/gitlab-initial-root-password/71546291#71546291)):
 
 ```bash
-cd api
-sh build.sh
+# bash in gitlab container
+# dir: /etc/gitlab
+gitlab-rake "gitlab:password:reset[root]"
 ```
 
 ### Create New Project on GitLab
@@ -76,4 +79,13 @@ A runner gets registered in the `register-runner` service defined in `docker-com
 
 ### GitLab Container Registry
 
-For the jobs in the CI pipeline to run, they need access to the containers where our app runs. The GitLab Container Registry should be default enabled on port 5050 (see [https://docs.gitlab.com/ee/administration/packages/container_registry.html](https://docs.gitlab.com/ee/administration/packages/container_registry.html)).
+For the jobs in the CI pipeline to run, they need access to the containers where our app runs. We are using Docker Hub as a container registry.
+
+#### Build Docker Image
+
+This will push the `dbuckleysm/docker-fastapi` image to Docker Hub. This is the image used by `docker-compose.prod.yml` and the GitLab jobs.
+
+```bash
+cd api
+sh build.sh
+```
