@@ -1,7 +1,7 @@
 image: docker:stable
 
 services:
-- docker:dind
+  - docker:dind
 
 stages: # List of stages for jobs, and their order of execution
   - test
@@ -16,7 +16,6 @@ test-job:
     - docker-compose exec fastapiapp pytest -s
   after_script:
     - docker-compose down
-
 # build-job: # This job runs in the build stage, which runs first.
 #   stage: build
 #   before_script:
@@ -28,20 +27,6 @@ test-job:
 #   after_script:
 #     - docker-compose down
 
-
-stages: # List of stages for jobs, and their order of execution
-  - build
-  #- test
-  # - deploy
-
-build-job: # This job runs in the build stage, which runs first.
-  stage: build
-  before-script:
-  script:
-    - docker-compose up -d
-    - echo "Containers built."
-    - docker-compose exec fastapiapp pytest -s
-    - docker-compose exec fastapiapp pylint
 # unit-test-job: # This job runs in the test stage.
 #   stage: test # It only starts when the job in the build stage completes successfully.
 #   script:
