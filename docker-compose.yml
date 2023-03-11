@@ -2,6 +2,8 @@ version: '3'
 networks:
   app-tier:
     driver: bridge
+  gitlab:
+    driver: bridge
 services:
   fastapiapp:
     container_name: docker-fastapi
@@ -37,6 +39,8 @@ services:
     # To persist the data outside the container
     volumes:
       - mongodb_data_container:/data/db
+
+  
 
 volumes:
   mongodb_data_container: {}

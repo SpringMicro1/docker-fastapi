@@ -51,13 +51,14 @@ services:
       - './config:/etc/gitlab-runner'
     networks:
       - gitlab
+  # Register Runner service was here, but it has been moved to the regular docker-compose.yml file.
   register-runner:
     # Create a runner
     # https://forum.gitlab.com/t/example-gitlab-runner-docker-compose-configuration/67344
     restart: 'no'
     image: gitlab/gitlab-runner:latest
-    depends_on:
-      - dind
+    # depends_on:
+    #   - dind
     environment:
       - CI_SERVER_URL=${CI_SERVER_URL}
       - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
