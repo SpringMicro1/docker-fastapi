@@ -12,17 +12,17 @@ stages: # List of stages for jobs, and their order of execution
 lint-job: # This job runs in the lint stage, which runs first.
   stage: lint
   before_script:
-    - docker exec fastapiapp mkdir -p public/badges public/lint
-    - docker exec fastapiapp echo undefined > public/badges/$CI_JOB_NAME.score
-    - docker exec fastapiapp pip install pylint-gitlab
+    - docker exec gitlab mkdir -p public/badges public/lint
+    - docker exec gitlab echo undefined > public/badges/$CI_JOB_NAME.score
+    - docker exec docker-fastapi pip install pylint-gitlab
   script:
     - echo "Linting code..."
-    - docker exec fastapiapp pylint --exit-zero --output-format=text $(find -type f -name "*.py" ! -path "**/.venv/**") | tee /tmp/pylint.txt
-    - docker exec fastapiapp sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' /tmp/pylint.txt > public/badges/$CI_JOB_NAME.score
-    - docker exec fastapiapp pylint --exit-zero --output-format=pylint_gitlab.GitlabCodeClimateReporter $(find -type f -name "*.py" ! -path "**/.venv/**") > codeclimate.json
-    - docker exec fastapiapp pylint --exit-zero --output-format=pylint_gitlab.GitlabPagesHtmlReporter $(find -type f -name "*.py" ! -path "**/.venv/**") > public/lint/index.html
+    - docker exec docker-fastapi pylint --exit-zero --output-format=text $(find -type f -name "*.py" ! -path "**/.venv/**") | tee /tmp/pylint.txt
+    - docker exec docker-fastapi sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' /tmp/pylint.txt > public/badges/$CI_JOB_NAME.score
+    - docker exec docker-fastapi pylint --exit-zero --output-format=pylint_gitlab.GitlabCodeClimateReporter $(find -type f -name "*.py" ! -path "**/.venv/**") > codeclimate.json
+    - docker exec docker-fastapi pylint --exit-zero --output-format=pylint_gitlab.GitlabPagesHtmlReporter $(find -type f -name "*.py" ! -path "**/.venv/**") > public/lint/index.html
   after_script:
-    - docker exec fastapiapp anybadge --overwrite --label $CI_JOB_NAME --value=$(cat public/badges/$CI_JOB_NAME.score) --file=public/badges/$CI_JOB_NAME.svg 4=red 6=orange 8=yellow 10=green
+    - docker exec gitlab anybadge --overwrite --label $CI_JOB_NAME --value=$(cat public/badges/$CI_JOB_NAME.score) --file=public/badges/$CI_JOB_NAME.svg 4=red 6=orange 8=yellow 10=green
   artifacts:
     paths:
       - public
