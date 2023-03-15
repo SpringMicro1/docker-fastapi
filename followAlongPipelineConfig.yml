@@ -1,0 +1,35 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
+stages:
+  # - lint
+  - test
+  # - build # Depends on test and lint
+  # - deploy # Depends on build
+
+test_job:
+  stage: test
+  image: docker/compose
+  script:
+    - docker-compose version
+    - docker-compose -f docker-compose.prod.yml up -d
+    - docker-compose exec -T fastapiapp pytest
+  after_script:
+    - docker-compose down
+
+# build_job:
+#   stage: build
+#   variables:
+#     # Possibly change dbuckleysm/docker-fastapi to mcbuzzerr/docker-fastapi
+#     IMAGE_NAME: dbuckleysm/docker-fastapi
+#   before_script:
+#     - docker-compose up -d
+#     # Authenticate with registry
+#     - docker login -u $DOCKER_USER -p $DOCKER_PASS
+#   script:
+#     # Build image from registry or local 
+#     - docker compose build -t $IMAGE_NAME
+#     # Push image to registry
+#     - docker push $IMAGE_NAME
