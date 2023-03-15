@@ -9,6 +9,11 @@ stages: # List of stages for jobs, and their order of execution
   - test
   # - deploy
 
+variables:
+  CI_REGISTRY: https://hub.docker.com
+  CI_USERNAME: mcbuzzerr
+  CI_PASSWORD: OJT5Mv9xvh&t
+
 lint-job: # This job runs in the lint stage, which runs first.
   stage: lint
   image: docker/compose
@@ -37,10 +42,7 @@ build-job:
   image: docker/compose
   script:
     - docker-compose build # up -d --
-    - echo "BUNGUS"
-    - echo "SHERPA"
-    - echo "FLANNIGAN"
-    - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" -password-stdin  "$CI_REGISTRY_URL"
+    - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin  "$CI_REGISTRY"
     - docker-compose push mcbuzzerr/fastapiapp:latest
 
 test-job:
