@@ -14,6 +14,7 @@ lint-job: # This job runs in the lint stage, which runs first.
   image: docker/compose
   before_script:
     - echo "Pre-Linting code..."
+    - docker-compose -f docker-compose.prod.yml up -d
     # - docker exec gitlab mkdir -p public/badges public/lint
     # - docker exec gitlab echo undefined > public/badges/$CI_JOB_NAME.score
     - docker-compose exec -T fastapiapp pip install pylint #-gitlab
