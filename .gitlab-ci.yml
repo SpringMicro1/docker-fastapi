@@ -17,7 +17,7 @@ lint-job: # This job runs in the lint stage, which runs first.
     - docker-compose -f docker-compose.prod.yml up -d
   script:
     - echo "Linting code..."
-    - docker-compose exec -T fastapiapp pylint --output-format colorized --disable=R,C $(find . -name "project/**/*.py" | xargs)
+    - docker-compose exec -T fastapiapp pylint $(find . -name "project/**/*.py" | xargs) # --output-format colorized --disable=R,C
   after_script:
     - docker-compose down
 
