@@ -2,8 +2,6 @@ version: '3'
 networks:
   app-tier:
     driver: bridge
-  gitlab:
-    driver: bridge
 services:
   fastapiapp:
     container_name: docker-fastapi

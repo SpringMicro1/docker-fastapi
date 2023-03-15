@@ -13,26 +13,13 @@ lint-job: # This job runs in the lint stage, which runs first.
   stage: lint
   image: docker/compose
   before_script:
-    - echo "Pre-Linting code..."
+    - echo "before_script"
     - docker-compose -f docker-compose.prod.yml up -d
-    # - docker exec gitlab mkdir -p public/badges public/lint
-    # - docker exec gitlab echo undefined > public/badges/$CI_JOB_NAME.score
-    # - docker-compose exec -T fastapiapp pip install pylint # PYLINT IS ALREADY IN THE REQUIREMENTS.TXT FILE
   script:
     - echo "Linting code..."
-    - docker-compose exec -T fastapiapp pylint --exit-zero --output-format=colorized --disable=R,C $(find -type f -name "*.py" ! -path "**/.venv/**")
-    # - docker exec docker-fastapi pylint --exit-zero --output-format=text $(find -type f -name "*.py" ! -path "**/.venv/**") | tee /tmp/pylint.txt
-    # - docker exec docker-fastapi sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' /tmp/pylint.txt > public/badges/$CI_JOB_NAME.score
-    # - docker exec docker-fastapi pylint --exit-zero --output-format=pylint_gitlab.GitlabCodeClimateReporter $(find -type f -name "*.py" ! -path "**/.venv/**") > codeclimate.json
-    # - docker exec docker-fastapi pylint --exit-zero --output-format=pylint_gitlab.GitlabPagesHtmlReporter $(find -type f -name "*.py" ! -path "**/.venv/**") > public/lint/index.html
-  # after_script:
-  #   - docker-compose exec gitlab anybadge --overwrite --label $CI_JOB_NAME --value=$(cat public/badges/$CI_JOB_NAME.score) --file=public/badges/$CI_JOB_NAME.svg 4=red 6=orange 8=yellow 10=green
-  # artifacts:
-    # paths:
-    #   - public
-    # reports:
-    #   codequality: codeclimate.json
-    # when: always
+    - docker-compose exec -T fastapiapp pylint --output-format=colorized --disable=R,C $(find -type f -name "*.py" ! -path "**/.venv/**" | xargs)
+  after_script:
+    - docker-compose down
 
 # build-job:
 #   stage: build
