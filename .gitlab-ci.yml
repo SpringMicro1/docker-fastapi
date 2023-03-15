@@ -37,7 +37,8 @@ build-job:
   image: docker/compose
   script:
     - docker-compose build # up -d --
-    - docker-compose push fastapiapp
+    - docker login -u $CI_USERMA<E -p $CI_PASSWORD $CI_REGISTRY_URL
+    - docker-compose push mcbuzzerr/fastapiapp:latest
 
 test-job:
   stage: test
