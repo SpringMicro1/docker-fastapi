@@ -36,7 +36,7 @@ build-job:
   stage: build
   image: docker/compose
   script:
-    - docker-compose build
+    - docker-compose up -d --build
     - docker-compose ps -a 
     - docker-compose push mcbuzzerr/fastapiapp
 
