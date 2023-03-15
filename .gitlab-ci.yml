@@ -41,11 +41,11 @@ build-job:
   stage: build
   image: docker/compose
   script:
-    - docker-compose build -t mcbuzzerr/docker-fastapi:latest # up -d --
+    - docker-compose up -d --build # up -d --
     - docker-compose ps -a
     # - docker-compose start fastapiapp
     - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin  "$CI_REGISTRY"
-    - docker push mcbuzzerr/docker-fastapi:latest
+    - docker push mcbuzzerr/project_fastapiapp:latest
 
 test-job:
   stage: test
