@@ -17,8 +17,8 @@ lint-job: # This job runs in the lint stage, which runs first.
     - docker-compose -f docker-compose.prod.yml up -d
   script:
     - echo "Linting code..."
-    - docker-compose exec -T fastapiapp find project -name '*.py' -type f -exec pylint --output-format=colorized {} \;
-    # - docker-compose exec -T fastapiapp pylint project/main.py # $(find . -name "project/**/*.py" | xargs) # --output-format colorized --disable=R,C
+    # the "--extension-pkg-whitelist" is needed to avoid pylint error `No name 'BaseModel' in module 'pydantic'` when using pydantic - https://github.com/pydantic/pydantic/issues/1961
+    - docker-compose exec -T fastapiapp find project -name '*.py' -type f -exec pylint --output-format=colorized --extension-pkg-whitelist='pydantic' {} \;
   after_script:
     - docker-compose down
 
