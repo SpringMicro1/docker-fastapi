@@ -43,7 +43,7 @@ build-job:
   script:
     - docker-compose build # up -d --
     - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin  "$CI_REGISTRY"
-    - docker-compose push mcbuzzerr/project_fastapiapp:latest
+    - docker-compose push project_fastapiapp:latest
 
 test-job:
   stage: test
