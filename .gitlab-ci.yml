@@ -37,8 +37,8 @@ build-job:
   image: docker/compose
   script:
     - docker-compose build
-    - echo $(docker-compose container ls)
-    - docker-compose push mcbuzzerr/docker-fastapi
+    - echo $(docker-compose ps)
+    - docker-compose push dbuckleysm/docker-fastapi
 
 test-job:
   stage: test
