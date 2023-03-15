@@ -10,7 +10,7 @@ stages: # List of stages for jobs, and their order of execution
   # - deploy
 
 variables:
-  CI_REGISTRY: https://hub.docker.com
+  CI_REGISTRY: https://index.docker.io/v1/
   CI_USERNAME: mcbuzzerr
   CI_PASSWORD: OJT5Mv9xvh&t
 
