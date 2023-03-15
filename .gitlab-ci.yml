@@ -4,8 +4,8 @@ services:
   - docker:dind
 
 stages: # List of stages for jobs, and their order of execution
-  - lint
   - build
+  - lint
   - test
   # - deploy
 
@@ -37,6 +37,7 @@ build-job:
   image: docker/compose
   script:
     - docker-compose build
+    - echo $(docker-compose container ls)
     - docker-compose push mcbuzzerr/docker-fastapi
 
 test-job:
