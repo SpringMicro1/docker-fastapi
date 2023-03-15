@@ -37,7 +37,7 @@ build-job:
   image: docker/compose
   script:
     - docker-compose build
-    - docker-compose ls -a 
+    - docker-compose ps -a 
     - docker-compose push mcbuzzerr/fastapiapp
 
 test-job:
