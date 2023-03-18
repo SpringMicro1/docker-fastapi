@@ -12,11 +12,11 @@ services:
     environment: 
       - MONGODB_CONNSTRING=mongodb://admin:password@mongodb
     # Mount the api directory within the container at /home/fastapi/app/api
-    # volumes:
-      # - ./api:/home/fastapi/app/api
+    volumes:
+      - ./api:/home/fastapi/app/api
       # This blank directory exists so that the local virtual environment doesn't get
       # used by the container. https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder#comment81906046_47153236
-      # - ./api/blank:/home/fastapi/app/api/env
+      - ./api/blank:/home/fastapi/app/api/env
 
     entrypoint: ["sh", "/home/fastapi/app/api/start.sh"]
     depends_on:

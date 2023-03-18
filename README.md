@@ -1,4 +1,3 @@
-Tutorial im watching, specifically where I left off: https://youtu.be/qP8kir2GUgo?t=1557
 # FastAPI + Beanie + Docker + GitLab
 
 A repository with a FastAPI app and CI/CD enabled with a self-hosted GitLab container.
@@ -38,7 +37,7 @@ docker exec -it docker-fastapi pytest -s -k "test_comments"
 docker-compose -f docker-compose-gitlab.yml up -d
 ```
 
-> NOTE: The GitLab container takes like 10-15 minutes to get up and running. Check the logs to see when it's ready.
+> NOTE: The GitLab container can take between 2-15 minutes to get up and running depending on your machine. Check the logs for a log with the text `Server Initialized` to see when it's ready.
 
 https://docs.gitlab.com/ee/install/docker.html#install-gitlab-using-docker-compose
 
