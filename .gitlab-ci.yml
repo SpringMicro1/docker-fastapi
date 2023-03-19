@@ -4,18 +4,39 @@ services:
   - docker:dind
 
 stages: # List of stages for jobs, and their order of execution
-  #- build
+  - build
+  - lint
   - test
   # - deploy
 
-# build-job:
-#   stage: build
-#   image: docker/compose
-#   script:
-#     - docker-compose version
-#     #- docker-compose up -d
-#     #- docker-compose build
-#     #- docker push dbuckleysm/docker-fastapi
+variables:
+  CI_REGISTRY: https://index.docker.io/v1/
+  CI_USERNAME: mcbuzzerr
+  CI_PASSWORD: OJT5Mv9xvh&t
+
+lint-job: 
+  stage: lint
+  image: docker/compose
+  before_script:
+    - echo "before_script"
+    - docker-compose -f docker-compose.prod.yml up -d
+  script:
+    - echo "Linting code..."
+    # the "--extension-pkg-whitelist" is needed to avoid pylint error `No name 'BaseModel' in module 'pydantic'` when using pydantic - https://github.com/pydantic/pydantic/issues/1961
+    - docker-compose exec -T fastapiapp find project -name '*.py' -type f -exec pylint --output-format=colorized --extension-pkg-whitelist='pydantic' {} \;
+    # The above command goes through all the files in the project folder and lints them individually. I wouldn't be surprised if we wanted to evalutate them all at once in order to have a threshold for the job to fail.
+  after_script:
+    - docker-compose down
+
+build-job:
+  stage: build
+  image: docker/compose
+  script:
+    - docker-compose up -d --build 
+    - docker-compose ps -a
+    - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin  "$CI_REGISTRY"
+    - docker tag project_fastapiapp:latest mcbuzzerr/project_fastapiapp:latest
+    - docker push mcbuzzerr/project_fastapiapp:latest
 
 test-job:
   stage: test
@@ -24,30 +45,14 @@ test-job:
     - docker-compose version
     - docker-compose -f docker-compose.prod.yml up -d
     - docker-compose exec -T fastapiapp pytest
+    # - docker-compose run --rm my-api pytest --junitxml=pytest-results.xml # Alterative to the above command that outputs the results to a file. I have not tested this yet.
   after_script:
     - docker-compose down
-# build-job: # This job runs in the build stage, which runs first.
-#   stage: build
-#   before_script:
-#     - docker-compose up -d
-#   script:
-#     - echo "Containers built."
-#     - docker-compose exec fastapiapp pytest -s
-#     - docker-compose exec fastapiapp pylint
-#   after_script:
-#     - docker-compose down
+  # artifacts: # This is an example of how to output the results of the tests to a file. I have not tested this yet.
+  #   paths:
+  #     - pytest-results.xml
 
-# unit-test-job: # This job runs in the test stage.
-#   stage: test # It only starts when the job in the build stage completes successfully.
-#   script:
-#     - echo "Running unit tests..."
-#     - docker-compose run fastapiapp pytest -s
 
-# lint-test-job: # This job also runs in the test stage.
-#   stage: test # It can run at the same time as unit-test-job (in parallel).
-#   script:
-#     - echo "Linting code..."
-#     - docker-compose run fastapiapp pylint
 # deploy-job: # This job runs in the deploy stage.
 #   stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
 #   environment: production
